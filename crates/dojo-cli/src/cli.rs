@@ -1,11 +1,13 @@
 mod build;
 mod init;
 mod migrate;
+mod deploy;
 
 use build::BuildArgs;
 use clap::{Args, Parser, Subcommand};
 use init::InitArgs;
 use migrate::MigrateArgs;
+use deploy::DeployArgs;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -30,6 +32,9 @@ enum Commands {
     Bind(BindArgs),
     #[command(about = "Retrieve an entity's state by entity ID")]
     Inspect(InspectArgs),
+
+    #[command(about = "Deploy the world")]
+    Deploy(DeployArgs),
 }
 
 #[derive(Args)]
@@ -55,6 +60,7 @@ fn main() -> anyhow::Result<()> {
         Commands::Migrate(args) => migrate::run(args),
         Commands::Bind(..) => Ok(print!("Bind")),
         Commands::Inspect(..) => Ok(print!("Inspect")),
+        Commands::Deploy(args) => deploy::run(args),
     }?;
     Ok(())
 }
